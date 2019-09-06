@@ -10,9 +10,9 @@
 <body>
 <div>
 	<h2>회원가입</h2>
-	<form id="joinForm" action="<%=request.getContextPath()%>/member.do">
+	<form id="joinForm" action="<%=request.getContextPath()%>/customer.do">
 		<input type="hidden" name="action" value="join" />
-		<input type="hidden" name="dest" value="login"/>
+		<input type="hidden" name="page" value="login"/>
 		아이디	<input type="text" name="id"/> <br/>
 		비밀번호	<input type="text" name="pw"/> <br/>
 		이름 		<input type="text" name="name"/> <br>

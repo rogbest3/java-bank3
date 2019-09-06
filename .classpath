@@ -15,5 +15,6 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="C:/Users/user/eclipse-jee/jee-bitcamp/WebContent/WEB-INF/lib/jstl.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/user/eclipse-jee/jee-bitcamp/WebContent/WEB-INF/lib/standard.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/user/eclipse/jee-2019-06/eclipse/lombok.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

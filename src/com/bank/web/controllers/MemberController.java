@@ -9,13 +9,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.bank.web.command.Sender;
+import com.bank.web.command.Command;
+import com.bank.web.command.MoveCommand;
+import com.bank.web.command.Order;
+import com.bank.web.command.Receiver;
 import com.bank.web.domains.CustomerBean;
 import com.bank.web.domains.MemberBean;
 import com.bank.web.pool.Constants;
 import com.bank.web.services.MemberService;
 import com.bank.web.servicesimpl.MemberServiceImpl;
 
-@WebServlet("/member.do")
+@WebServlet("/customer.do")
 public class MemberController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
   //  public MemberController() {
@@ -29,19 +34,18 @@ public class MemberController extends HttpServlet {
 		// 데이터 저장이 안됨.
 	//	
 
-		String jspName = "";
 		MemberBean mparam = new MemberBean();
 		CustomerBean param = new CustomerBean();	//	같은 메소드 안에 있기 때문에 null 넣어서 나눌 필요없지만 메소드 밖에 놓게 되면 null을 주고 각 메소드에서 초기와 해줘야함.
 		MemberService service = new MemberServiceImpl();
 
-		switch (request.getParameter("action")) {
-		case "move":
-			request.getRequestDispatcher(
-					String.format(Constants.VIEW_PATH, "customer",
-					request.getParameter("dest")))
-					.forward(request, response);
-			System.out.println("join 이동");
-			break;
+		
+		Receiver.init(request);
+		Receiver.cmd.execute();
+		if(Receiver.cmd.getAction()==null) {
+			Receiver.cmd.setPage();
+		}
+		
+		switch (Receiver.cmd.getAction()) {	//	move 가 default 됨
 		case "join" : 
 			System.out.println("join 진입");
 			String id = request.getParameter("id");
@@ -56,13 +60,8 @@ public class MemberController extends HttpServlet {
 			param.setPw(pw);
 			param.setSsn(ssn);
 			System.out.println("회원정보 : "+ param.toString());
-			
 			service.join(param);
-			request.getRequestDispatcher(
-					String.format(Constants.VIEW_PATH, "customer",
-					request.getParameter("dest")))
-					.forward(request, response);
-			
+			Receiver.cmd.setPage("login");
 			break;
 			
 		case "login":		
@@ -72,30 +71,18 @@ public class MemberController extends HttpServlet {
 			
 			mparam.setId(id);
 			mparam.setPw(pw);
-			param = service.login(mparam);
-			System.out.println("---------++++++++++++++--------");
-			System.out.println(param.toString());
-			System.out.printf("param.getId : %s, param.getPw : %s\n", param.getId(), param.getPw());
-			
-			if(id.equals(param.getId())) {
-				System.out.println("아이디 동일");
-			}else {
-				System.out.println("아이디 틀림");
-			}
-			
-			if(id.equals(param.getId()) && pw.equals(param.getPw())) {
+		//	param = service.login(mparam);
+			CustomerBean cust = service.login(mparam);
+			System.out.printf("login : %s, %s\n", cust.getId(), cust.getPw());
+		
+		//	if(cust == null) {
+			if(id == cust.getId() ) {
 				System.out.println("로그인 성공");
-				request.setAttribute("customer", param);	// request에 객체 param(요소가 됨)을  customer라는 이름으로 담음, jsp에서 출력s
-				request.getRequestDispatcher(
-						String.format(Constants.VIEW_PATH, "customer",
-						request.getParameter("dest")))
-						.forward(request, response);
+				request.setAttribute("customer", cust);	// request에 객체 param(요소가 됨)을  customer라는 이름으로 담음, jsp에서 출력s
+				Receiver.cmd.setPage("mypage");
 			}else {
 				System.out.println("로그인 실패");
-				request.getRequestDispatcher(
-						String.format(Constants.VIEW_PATH, "customer",
-						"login"))
-						.forward(request, response);
+				Receiver.cmd.setPage("login");
 			}
 
 			break;
@@ -105,12 +92,10 @@ public class MemberController extends HttpServlet {
 			
 		case "existId" :
 			
-			break;
+			break;	
 		}
-
-	//	RequestDispatcher rd = request.getRequestDispatcher(String.format("WEB-INF/views/customer/%s.jsp", jspName));
-	//	rd.forward(request, response);
 		
+		Sender.forward(request, response);
 	//	response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 

@@ -98,8 +98,6 @@ public class MemberServiceImpl implements MemberService {
 
 		CustomerBean cb = new CustomerBean();
 		cb = dao.login(param);
-		System.out.println("-----------");
-		System.out.println(cb.toString());
 		return cb;
 	}
 

@@ -11,7 +11,6 @@ import com.bank.web.domains.EmployeeBean;
 import com.bank.web.domains.MemberBean;
 import com.bank.web.pool.Constants;;
 public class MemberDAOImpl implements MemberDAO{
-	
 
 	@Override
 	public void insertCustomer(CustomerBean param) {
@@ -25,7 +24,6 @@ public class MemberDAOImpl implements MemberDAO{
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
@@ -35,7 +33,6 @@ public class MemberDAOImpl implements MemberDAO{
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
@@ -49,12 +46,14 @@ public class MemberDAOImpl implements MemberDAO{
 			
 			if(param.getId().equals(arr[0])
 					&& param.getPw().equals(arr[1])) {
-				System.out.println("로그인 성공1");
+				System.out.println("DAO에서 비교 성공");
 				bean.setId(arr[0]);
 				bean.setPw(arr[1]);
 				bean.setName(arr[2]);
 				bean.setSsn(arr[3]);
 				bean.setCredit(arr[4]);		
+			}else {
+				bean = null;
 			}
 			
 		//	while((string = reader.readLine()) != null){	
@@ -64,7 +63,7 @@ public class MemberDAOImpl implements MemberDAO{
 		//	}
 			reader.close();	
 			
-			System.out.printf("bean : %s, %s\n",bean.getId(), bean.getPw());
+			System.out.printf("bean : " + bean + "\n");
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

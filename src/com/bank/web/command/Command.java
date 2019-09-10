@@ -19,18 +19,21 @@ public class Command implements Order{
 	public void execute() {
 		setDomain();
 		setPage();
-		System.out.printf("리퀘스트가 가야할 길 : " + String.format(Constants.VIEW_PATH, domain, page) + "\n");
+	//	System.out.printf("리퀘스트가 가야할 길 : " + String.format(Constants.VIEW_PATH, domain, page) + "\n");
 		this.view = String.format(Constants.VIEW_PATH, domain, page);
-
+		System.out.println("4 - Command execute 실행");
 	}
 	public void setDomain() {
 		String path = request.getServletPath();		//	/customer.do
-		System.out.printf("서블릿 패스 ? : %s\n", path);
+	//	System.out.printf("서블릿 패스 ? : %s\n", path);
 		domain = path.replace(".do", "");			//	.do 삭제
 		domain = domain.substring(1);				//	/customer의 1번째부터 출력, 0번째의 /빼고 customer만 출력
 		
 	}
 	public void setPage() {
+		System.out.println("Command_setpage 전 : " + page);
 		page = request.getParameter("page");
+		System.out.println("Command_setpage 후 : " + page);
 	}
+
 }
